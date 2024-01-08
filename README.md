@@ -1,5 +1,5 @@
-# cse210-ww-student-template
-This is the starter code for students in the worldwide content version of CSE 210.
+# cse210-projects-by-alex-courter
+This project contains code in the worldwide content version of CSE 210 as well as project code by student Alexander D.K. Courter.
 
 This repository contains the starter code for many different projects. They are arranged as follows:
 
