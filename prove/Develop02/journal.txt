@@ -1,0 +1,18 @@
+Date: 19/01/2024, Prompt: write about a time you did something nice for someone else.
+I tried to be extra kind to my wife today so that she would feel loved.
+|||
+Date: 19/01/2024, Prompt: What did you do better today than you did yesterday?
+Today I participated in my goals more than I did yesterday.
+|||
+Date: 19/01/2024, Prompt: What experience taught you something new today?
+I got held up by a difficult challenge while programming today. I had to figure out how to parse a text file in a way that would allow me to strip out all unneccessary things and leave only the parts that could be inserted into a class object's member variables. I learned about the different string modulation functions, uncluding split, remove, replace, and trim. Each one had to be used at a specific part of the process to augment the text file back into program readable data. I learned how to handle this type of task through this experience.
+|||
+Date: 01/20/2024, Prompt: What did you do better today than you did yesterday?
+Today I did better at refactoring code than I did before
+|||
+Date: 01/20/2024, Prompt: What experience taught you something new today?
+My daughter is teaching me that young children are much smarter than we think
+|||
+Date: 01/20/2024, Prompt: What would you change about this journal?
+I already fixed the date format back to month/day/year. if I had more time, I would do more with the file handling to make it easier, or add functionality for saving and adding new prompts.
+|||
