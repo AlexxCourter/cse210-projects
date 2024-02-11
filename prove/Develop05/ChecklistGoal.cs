@@ -17,10 +17,15 @@ public class ChecklistGoal : Goal
         _amountCompleted += 1;
         if (IsComplete())
         {
-            int total = int.Parse(GetPoints()) + _bonus;
+            int total = int.Parse(GetPoints()); //bonus calc is done in the overridden GetPoints()
+            Console.WriteLine("=*=*=*=* BONUS *=*=*=*=");
             Console.WriteLine($"Congratulations! You have earned {total} points!");
         }
-        base.RecordEvent();
+        else
+        {
+            base.RecordEvent();
+        }
+       
     }
 
     public override bool IsComplete()
@@ -54,7 +59,8 @@ public class ChecklistGoal : Goal
     {
         if (IsComplete())
         {
-            return base.GetPoints() + _bonus;
+            int total = int.Parse(base.GetPoints()) + _bonus;
+            return $"{total}";
         }
         else
         {
