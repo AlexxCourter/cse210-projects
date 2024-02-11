@@ -1,0 +1,6 @@
+1050
+SimpleGoal:Finish this Project||Completed when this test is successful.||500||true
+EternalGoal:Write my novel every day||write in my novel draft each day.||50
+ChecklistGoal:Draw new pictures||Draw a new picture seven times.||100||1000||0||7
+SimpleGoal:test 1||a nice summary||150||true
+SimpleGoal:test 2||a good description||400||true
