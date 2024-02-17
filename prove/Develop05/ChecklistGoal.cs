@@ -25,7 +25,6 @@ public class ChecklistGoal : Goal
         {
             base.RecordEvent();
         }
-       
     }
 
     public override bool IsComplete()
