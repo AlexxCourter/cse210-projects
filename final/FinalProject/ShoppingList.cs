@@ -23,4 +23,16 @@ public class ShoppingList : DataModel
         result += base.GetSaveData();
         return result;
     }
+
+    public List<string> GetIngredientChecklist()
+    {
+        List<string> result = new();
+
+        foreach(Ingredient item in _ingredients)
+        {
+            result.Add(item.GetChecklistString());
+        }
+
+        return result;
+    }
 }

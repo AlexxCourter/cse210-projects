@@ -20,11 +20,11 @@ public class ShoppingView : PageView
 
     public override void Display()
     {
-        List<string> details = _activeList.GetIngredientDetails();
         bool runChecklist = true;
 
         while(runChecklist == true)
         {
+            List<string> details = _activeList.GetIngredientChecklist();
             Console.Clear();
 
             Console.WriteLine($"List from {_activeList.GetTimeStamp()}\n");
@@ -46,9 +46,9 @@ public class ShoppingView : PageView
             {
                 runChecklist = false;
             }
-            else if (convertable && result >= 0 && result <= details.Count)
+            else if (convertable && result >= 0)
             {
-                _activeList.MarkItem(result);
+                _activeList.MarkItem(result-1);
             }
             else
             {

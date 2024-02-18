@@ -9,6 +9,7 @@ public class Ingredient
     {
         _name = name;
         _quantity = quantity;
+        _measurement = "";
 
         _checked = false;
     }
