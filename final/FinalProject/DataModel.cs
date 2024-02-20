@@ -31,6 +31,11 @@ public class DataModel
         return result;
     }
 
+    public List<Ingredient> GetIngredients()
+    {
+        return _ingredients;
+    }
+
     public void AddIngredient(Ingredient item)
     {
         _ingredients.Add(item);
@@ -47,5 +52,10 @@ public class DataModel
         }
 
         return result;
+    }
+
+        public void UpdateIngredient(Ingredient ingredient, int index)
+    {
+        _ingredients[index] = ingredient;
     }
 }

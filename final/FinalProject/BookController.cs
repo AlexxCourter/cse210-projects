@@ -17,7 +17,6 @@ public class BookController
 
     public void Run()
     {
-        Console.WriteLine("MILESTONE VERSION: This version of the app successfully creates new recipes/shopping lists & displays them.");
         //runs the main loop that serves the recipe book
         bool runningState = true;
 
@@ -35,7 +34,7 @@ public class BookController
                     if (selectList >= 0)
                     {
                         _shopView = new(_shoppingLists[selectList], selectList);
-                        _shopView.Display();
+                        _shoppingLists[selectList] = _shopView.Display();
                     }
                     break;
                 case "2":
@@ -43,7 +42,7 @@ public class BookController
                     if (selectRecipe >= 0)
                     {
                         _recView = new(_recipes[selectRecipe], selectRecipe);
-                        _recView.Display();
+                        _recipes[selectRecipe] = _recView.Display();
                     }
                     break;
                 case "3":
@@ -53,6 +52,15 @@ public class BookController
                     _recipes.Add(_recView.CreateNew(_recipes.Count));
                     break;
                 case "5":
+                    Save();
+                    break;
+                case "6":
+                    Load();
+                    break;
+                case "7":
+                    SendToList();
+                    break;
+                case "8":
                     runningState = false;
                     break;
                 default:
@@ -72,7 +80,10 @@ public class BookController
         Console.WriteLine("2. Display Recipes");
         Console.WriteLine("3. New shopping list");
         Console.WriteLine("4. New recipe");
-        Console.WriteLine("5. Quit");
+        Console.WriteLine("5. Save Data.");
+        Console.WriteLine("6. Load Data.");
+        Console.WriteLine("7. Send a recipe to Shopping List.");
+        Console.WriteLine("8. Quit");
         Console.Write("> ");
         string choice = Console.ReadLine();
         return choice;
@@ -100,11 +111,66 @@ public class BookController
     {
         //loads data from an internal data file.
         //DELIMITER EXPLANATION
-        // :: - separates the name/timestamp of recipe/shoppingList from the data
-        //[+] - separates the shopping lists (top) from the recipes (bottom) data
+        // :: - separates the name/timestamp and type of object of recipe/shoppingList from the data
         //[=] - separates each detail, for a recipe, this separates first the ingredients and then the directions.
         //[-] - separates the ingredients from the directions in a recipe.
         // || - separates parts of an ingredient.
+        string filename = "recipebook.txt";
+
+        string[] lines = System.IO.File.ReadAllLines(filename);
+
+        foreach(string line in lines)
+        {
+            //first, identify the type of object in data[0].
+            string[] data = line.Split("::");
+            string type = data[0];
+            string name = data[1]; //contains name for recipe, timestamp for list.
+            string details = data[2]; //contains all ingredients and directions for that line.
+            string[] ingredients;
+
+            switch(type)
+            {
+                case "[s]":
+                    //set up the shopping list that will be loaded in
+                    ShoppingList list = new(name); //in this case, name above is the loaded time stamp.
+                    details = details.Trim(new Char[]{']', '=', '['}); //remove delimiter at ends to prevent empty lines
+                    ingredients = details.Split("[=]");
+                    foreach (string ingredient in ingredients)
+                    {
+                        // order is {_name}||{_quantity}||{_measurement}||{_checked}
+                        string[] parts = ingredient.Split("||");
+                        Ingredient newIngredient = new(parts[0], int.Parse(parts[1]), "", bool.Parse(parts[3])); //shopping lists don't track measurements.
+                        list.AddIngredient(newIngredient);
+                    }
+                    _shoppingLists.Add(list);
+                    
+                    break;
+                case "[r]":
+                    Recipe recipe = new(name); //in this case, name above is the loaded time stamp.
+                    details = details.Trim(new Char[]{']', '=', '['}); //remove delimiter at ends to prevent empty lines
+                    string[] recSections = details.Split("[-]");
+                    ingredients = recSections[0].Trim(new Char[]{']', '=', '['}).Split("[=]"); //need to remove any trailing delimiter again then split.
+                    string[] directions = recSections[1].Split("[=]");
+                    foreach (string ingredient in ingredients)
+                    {
+                        // order is {_name}||{_quantity}||{_measurement}||{_checked}
+                        string[] parts = ingredient.Split("||");
+                        string measurement = parts[2]; //need to parse any marked NONE.
+                        if (measurement == "NONE")
+                        {
+                            measurement = ""; //fixes measurement for proper display.
+                        }
+                        Ingredient newIngredient = new(parts[0], int.Parse(parts[1]), measurement, bool.Parse(parts[3])); //shopping lists don't track measurements.
+                        recipe.AddIngredient(newIngredient);
+                    }
+                    foreach (string direction in directions)
+                    {
+                        recipe.AddDirection(direction);
+                    }
+                    _recipes.Add(recipe);
+                    break;
+            }
+        }
 
     }
 
@@ -180,6 +246,28 @@ public class BookController
             }
         }
         return result -1;
+    }
+
+    public void SendToList()
+    {
+        int choice = DisplayRecipes();
+        Console.WriteLine($"You will send the ingredients of {_recipes[choice].GetName()} to a new shopping list. Continue?");
+        Console.Write("Type yes or no: ");
+        string send = Console.ReadLine().ToLower();
+        switch(send)
+        {
+            case "yes":
+                ShoppingList newList = new();
+                foreach(Ingredient ingredient in _recipes[choice].GetIngredients())
+                {
+                    newList.AddIngredient(ingredient);
+                }
+                AddNewShopList(newList);
+                Console.WriteLine($"New shopping list created from {_recipes[choice].GetName} recipe.");
+                break;
+            case "no":
+                break;
+        }
     }
 
 

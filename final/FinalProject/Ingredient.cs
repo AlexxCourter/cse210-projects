@@ -5,13 +5,13 @@ public class Ingredient
     private string _measurement;
     private bool _checked;
 
-    public Ingredient(string name, int quantity)
+    public Ingredient(string name, int quantity, bool check = false)
     {
         _name = name;
         _quantity = quantity;
         _measurement = "";
 
-        _checked = false;
+        _checked = check;
     }
 
     public Ingredient(string name, int quantity, string measurement, bool check = false)
@@ -56,7 +56,12 @@ public class Ingredient
 
     public string GetSaveable()
     {
-        return $"{_name}||{_quantity}||{_measurement}||{_checked}";
+        string measure = _measurement;
+        if (measure == "")
+        {
+            measure = "NONE"; //corrects for proper save file formatting.
+        }
+        return $"{_name}||{_quantity}||{measure}||{_checked}";
     }
 
     public string GetName()

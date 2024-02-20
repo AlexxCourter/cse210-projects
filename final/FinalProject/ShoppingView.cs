@@ -18,7 +18,7 @@ public class ShoppingView : PageView
         _index = index;
     }
 
-    public override void Display()
+    public override ShoppingList Display()
     {
         bool runChecklist = true;
 
@@ -36,7 +36,7 @@ public class ShoppingView : PageView
                 counter++;
             }
 
-            Console.Write("\n\nType number of item to mark, or quit to exit: ");
+            Console.Write("\n\nType number of item to mark, edit to edit list, or quit to exit: ");
             string choice = Console.ReadLine();
 
             int result;
@@ -46,6 +46,10 @@ public class ShoppingView : PageView
             {
                 runChecklist = false;
             }
+            else if (choice.ToLower() == "edit")
+            {
+                EditActive();
+            }
             else if (convertable && result >= 0)
             {
                 _activeList.MarkItem(result-1);
@@ -53,16 +57,120 @@ public class ShoppingView : PageView
             else
             {
                 Console.Clear();
-                Console.Write("Woops! Try typing the number next to the item you want to mark. Or, type quit if you are done (press enter to return to list).");
+                Console.Write("Woops! Try typing the number next to the item you want to mark, type edit if you want to edit the list, or, type quit if you are done (press enter to return to list).");
                 Console.ReadLine();
             }
         }
+        return _activeList;
     }
-    public override ShoppingList EditActive()
+    public override void EditActive()
     {
         ShoppingList result = _activeList;
-        //TODO: need logic for displaying edit menu to the user
-        return result;
+        //gathers user input to edit an existing recipe
+        //starts an edit loop
+        bool editing = true;
+        while(editing)
+        {
+            List<Ingredient> ingredients = _activeList.GetIngredients();
+            string timestamp = _activeList.GetTimeStamp();
+            //we can now use the editName, and the lists of ingredients and directions to edit a new copy of the recipe.
+            //this will be iterative through the loop, so we can see changes in real time as we choose to make more.
+            Console.WriteLine($"Editing the Shopping list from {timestamp}.");
+            Console.WriteLine("1. Edit ingredients");
+            Console.WriteLine("2. Done");
+            Console.Write("> ");
+            string choice = Console.ReadLine();
+
+            int counter = 1;
+
+            switch(choice)
+            {
+                case "1":
+                    foreach(string detail in _activeList.GetIngredientDetails())
+                    {
+                        Console.WriteLine($"{counter}. {detail}");
+                        counter++;
+                    }
+                    Console.Write("Enter the number of the ingredient you will change: ");
+                    string selectedDetail = Console.ReadLine();
+                    int ingredientIndex;
+                    bool convertable = int.TryParse(selectedDetail, out ingredientIndex);
+                    if (convertable && ingredientIndex > 0)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("What part of this ingredient needs to be changed?");
+                        //save the separate parts of the ingredient that can be changed
+                        //these will be inserted into a new Ingredient object, which will then replace
+                        //the same in the original recipe object.
+                        Ingredient chosenIngredient = ingredients[ingredientIndex - 1];
+                        bool editParts = true;
+                        do
+                        {
+                            counter = 1;
+                            List<string> types = new(){"[Name]", "[Amount]", "[Measurement]", "[Checkmarked]"};
+                            string[] ingParts = chosenIngredient.GetSaveable().Split("||");
+                            foreach (string part in ingParts)
+                            {
+                                Console.WriteLine($"  {counter}. {types[counter-1]} {part}");
+                                counter++;
+                            }
+                            Console.Write("> ");
+                            string selectedIngPart = Console.ReadLine();
+                            int selectedPartIndex;
+                            //overwrite for a new validity check.
+                            convertable = int.TryParse(selectedIngPart, out selectedPartIndex);
+                            if (convertable && selectedPartIndex > 0)
+                            {
+                                Console.WriteLine($"The old value was: {ingParts[selectedPartIndex-1]}");
+                                Console.Write("\nEnter a new value: ");
+                                ingParts[selectedPartIndex-1] = Console.ReadLine();
+                                //update the ingredient
+                                Ingredient updatedIngredient = new(ingParts[0],int.Parse(ingParts[1]),ingParts[2], bool.Parse(ingParts[3]));
+                                _activeList.UpdateIngredient(updatedIngredient, ingredientIndex-1);
+                                //perform the update and exit the inner update loop, or continue editing.
+                                Console.WriteLine("Edit another part of this ingredient? (type yes or no)");
+                                Console.Write("> ");
+                                string continueEdit = Console.ReadLine();
+                                bool checker = true;
+                                while (checker)
+                                {
+                                    switch(continueEdit)
+                                    {
+                                        case "yes":
+                                            //continues through the edit ingredient loop once more.
+                                            checker = false;
+                                            break;
+                                        case "no":
+                                            checker = false;
+                                            editParts = false;
+                                            break;
+                                        default:
+                                            Console.WriteLine("Woops! Please only type the word yes or no.");
+                                            Console.WriteLine("Edit another part of this ingredient?");
+                                            Console.Write("> ");
+                                            continueEdit = Console.ReadLine();
+                                            Console.Clear();
+                                            break;
+                                    }
+                                }
+                                
+                            } else
+                            {
+                                Console.WriteLine("\nOops. Please try again and only enter the correct input. (Press enter to go back to the editor).");
+                                Console.ReadLine();
+                            }
+                        } while (editParts);
+                        
+                    }
+                    break;
+                case "2":
+                    editing = false;
+                    break;
+                default:
+                    Console.WriteLine("Woops! Please only enter one of the numbers displayed.");
+                    break;
+            }
+        }
     }
 
     public ShoppingList CreateNew(int index)

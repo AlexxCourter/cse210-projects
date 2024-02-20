@@ -1,0 +1,5 @@
+[s]::2/19/2024 3:55:05 PM::Chocolate Syrup||1||NONE||True[=]Milk||1||NONE||False[=]oreo cookies||1||NONE||False[=]
+[s]::2/19/2024 3:58:31 PM::taco shells||1||NONE||False[=]ground beef||1||NONE||False[=]tomato||1||NONE||False[=]lettuce||1||NONE||False[=]sour cream||1||NONE||False[=]shredded cheese||1||NONE||False[=]
+[s]::2/20/2024 5:42:12 PM::taco shells||4||NONE||False[=]ground beef||10||oz.||False[=]diced tomato||3||oz.||False[=]sour cream||2||tablespoons||False[=]shredded cheese||1||cup||False[=]
+[r]::Chocolate Milk::Chocolate Syrup||1||tablespoon||False[=]Milk||8||oz.||False[=][-]Stir chocolate syrup into milk, serve, enjoy, prosper.[=]
+[r]::Tacos for 4::taco shells||4||NONE||False[=]ground beef||10||oz.||False[=]diced tomato||3||oz.||False[=]sour cream||2||tablespoons||False[=]shredded cheese||1||cup||False[=][-]Fry the ground beef until brown[=]place cooked beef in shell, then cover with cheese[=]add tomato and sour cream on top. serve.[=]

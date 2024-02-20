@@ -27,7 +27,7 @@ public class Recipe : DataModel
 
     public override string GetSaveData()
     {
-         string result = $"[+]{_name}::";
+         string result = $"[r]::{_name}::";
          result += base.GetSaveData();
          result += "[-]"; //delimiter separates recipe ingredients from directions specifically.
          foreach (string direction in _directions)
@@ -35,5 +35,15 @@ public class Recipe : DataModel
             result += $"{direction}[=]";
          }
          return result;
+    }
+
+    public void UpdateDirections(string direction, int index)
+    {
+        _directions[index] = direction;
+    }
+
+    public void UpdateName(string name)
+    {
+        _name = name;
     }
 }

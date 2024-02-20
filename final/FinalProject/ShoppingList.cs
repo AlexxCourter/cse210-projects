@@ -7,6 +7,11 @@ public class ShoppingList : DataModel
         _dateStamp = stamp;
     }
 
+    public ShoppingList(string timeStamp) : base()
+    {
+        _dateStamp = timeStamp;
+    }
+
     public string GetTimeStamp()
     {
         return _dateStamp;
@@ -19,7 +24,7 @@ public class ShoppingList : DataModel
 
     public override string GetSaveData()
     {
-        string result = $"{_dateStamp}::";
+        string result = $"[s]::{_dateStamp}::";
         result += base.GetSaveData();
         return result;
     }
